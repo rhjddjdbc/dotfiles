@@ -1,0 +1,50 @@
+# ===================================
+# Allgemeine Optionen
+# ===================================
+ignore-empty-password
+image=/home/sascha/3.png
+
+# ===================================
+# Farben & Darstellung
+# ===================================
+color=#282a36
+indicator-idle-visible
+indicator-radius=150 
+indicator-thickness=30
+line-color=282A36
+ring-color=696ebf
+inside-color=282A36
+key-hl-color=BD93F9
+separator-color=00000000
+text-color=F8F8F2
+text-caps-lock-color=""
+
+# ===================================
+# Verifizierungszustände
+# ===================================
+line-ver-color=BD93F9
+ring-ver-color=BD93F9
+inside-ver-color=282A36
+text-ver-color=8BE9FD
+
+# ===================================
+# Fehlerzustand
+# ===================================
+ring-wrong-color=FF5555
+text-wrong-color=FF5555
+inside-wrong-color=282A36
+line-wrong-color=282A36
+
+# ===================================
+# Klartext-Zustand
+# ===================================
+inside-clear-color=282A36
+text-clear-color=8BE9FD
+ring-clear-color=8BE9FD
+line-clear-color=8BE9FD
+
+# ===================================
+# Sonstiges
+# ===================================
+bs-hl-color=8BE9FD
+

@@ -1,0 +1,52 @@
+#IT
+https://grahamcluley.com/feed/
+https://feeds.feedburner.com/TheHackersNews?format=xml
+https://wiki.archlinux.org/index.php?title=Special:RecentChanges&feed=rss
+https://www.nist.gov/blogs/cybersecurity-insights/rss.xml
+https://www.bsi.bund.de/SiteGlobals/Functions/RSSFeed/RSSNewsfeed/RSSNewsfeed_CSW.xml
+https://wid.cert-bund.de/content/public/securityAdvisory/rss
+https://itsfoss.com/rss
+https://geti2p.net/en/feed/blog/atom
+https://blog.torproject.org/feed
+https://www.exploit-db.com/rss.xml
+
+https://www.freebsd.org/news/feed.xml
+https://www.freebsd.org/security/feed.xml
+https://www.kernel.org/feeds/kdist.xml
+
+	#christitus
+	https://christitus.com/categories/freebsd/index.xml
+	https://christitus.com/categories/linux/index.xml
+	https://christitus.com/categories/networking/index.xml
+	#zdnet
+	https://www.zdnet.com/topic/security/rss.xml
+	https://www.zdnet.com/topic/open-source/rss.xml
+	https://www.zdnet.com/topic/linux/rss.xml
+
+#news
+https://www.tagesschau.de/infoservices/alle-meldungen-100~rss2.xml
+https://www.tagesschau.de/wissen/technologie/index~rss2.xml
+https://www.tagesschau.de/faktenfinder/index~rss2.xml
+https://www.deutschlandfunkkultur.de/politik-114.rss
+http://newsfeed.zeit.de/index
+
+
+#anime
+https://www.animenewsnetwork.com/all/rss.xml?ann-edition=us
+https://waifuforlaifu.com/feed/
+https://otakukart.com/feed/
+
+#reddit
+https://wwww.reddit.com/r/linux.rss "~r/linux
+
+#hackaday
+https://hackaday.com/blog/feed/
+
+#pwned
+http://feeds.feedburner.com/HaveIBeenPwnedLatestBreaches
+
+#science
+https://scienceblog.com/feed
+https://www.space.com/feeds/all
+https://www.universetoday.com/feed/
+https://www.deutschlandfunkkultur.de/wissenschaft-108.rss

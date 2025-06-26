@@ -1,0 +1,89 @@
+#!/bin/sh
+
+# add more args here according to preference
+ARGS="--video-zoom=0.15 --shuffle"
+
+# number of the stream as per the $choice variable
+# name of the stream
+# additional tag to filter similar type of streams
+
+menu(){
+    printf "1. Lofi Girl\n"
+    printf "2. Chillhop\n"
+    printf "3. Anime Lofi\n"
+    printf "4. The Bootleg Boy\n"
+    printf "5. Nightcore Rock\n"
+    printf "6. Fear &\n"
+    printf "7. Darknet diary\n"
+}
+
+get_choice() {
+    # auto-detect and use wofi for Wayland and rofi for X11
+    if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+        choice=$(menu | rofi -dmenu)
+    elif [ "$XDG_SESSION_TYPE" = "x11" ]; then
+        choice=$(menu | rofi -dmenu)
+    else
+        echo "Unsupported session type: $XDG_SESSION_TYPE"
+        exit 1
+    fi
+    echo "$choice"
+}
+
+main() {
+    choice=$(get_choice)
+
+    case "$choice" in
+        "1. Lofi Girl")
+            URL="https://youtu.be/jfKfPfyJRdk"
+            ADDITIONAL_ARGS=""
+	    PLAYER="mpvpaper"
+            ;;
+        "2. Chillhop")
+            URL="https://youtu.be/7NOSDKb0HlU"
+            ADDITIONAL_ARGS=""
+	    PLAYER="mpvpaper"
+            ;;
+        "3. Anime Lofi")
+            URL="https://www.youtube.com/watch?v=GluJS2IAe_s"
+            ADDITIONAL_ARGS=""
+	    PLAYER="mpvpaper"
+            ;;
+        "4. The Bootleg Boy")
+            URL="https://youtu.be/WIU-A596KKU"
+            ADDITIONAL_ARGS=""
+	    PLAYER="mpvpaper"
+            ;;
+        "5. Nightcore Rock")
+            URL="https://www.youtube.com/watch?v=xNlCIWEFjkY"
+            ADDITIONAL_ARGS=""
+	    PLAYER="mpvpaper"
+            ;;
+        "6. Fear &")
+            URL="https://www.youtube.com/@FearAndPodcast/podcasts"
+            ADDITIONAL_ARGS="--no-video --shuffle"
+	    PLAYER="mpv"
+            ;;
+        "7. Darknet diary")
+            URL="https://www.youtube.com/@JackRhysider/podcasts"
+            ADDITIONAL_ARGS=""
+	    PLAYER="mpvpaper"
+            ;;
+        *)
+            echo "Invalid choice"
+            exit 1
+            ;;
+    esac
+
+    # run mpv with args and selected url
+    # added title arg to make sure the pkill command kills only this instance of mpv
+    # mpvpaper -o $ARGS --title="radio-mpv" ALL $URL $ADDITIONAL_ARGS
+    if [ "$PLAYER" = "mpvpaper" ]; then
+        mpvpaper -o $ARGS --title="radio-mpv" ALL $URL $ADDITIONAL_ARGS
+    else
+        mpv $URL $ADDITIONAL_ARGS --title="radio-mpv" 
+    fi
+}
+
+# kill any existing instance of script before starting a new one
+pkill -f radio-mpv || main
