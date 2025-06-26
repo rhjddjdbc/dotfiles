@@ -6,7 +6,7 @@ https://github.com/dracula
 https://github.com/prbhtkumr/rofi-radio
 
 # pic 
-![Screenshot](pic/screenshot-1750861747.png)
+![Screenshot](screenshot-1750861747.png)
 
 # it is my config for swayfx, bash, foot, kitty, nvim, qutebrowser, rofi, waybar, wlogout, yazi
 
