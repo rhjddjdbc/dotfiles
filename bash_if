@@ -1,0 +1,204 @@
+# -----
+# untar
+# -----
+function ex {
+ if [ -z "$1" ]; then
+    echo "Usage: ex <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
+    echo "       extract <path/file_name_1.ext> [path/file_name_2.ext] [path/file_name_3.ext]"
+ else
+    for n in "$@"
+    do
+      if [ -f "$n" ] ; then
+          case "${n%,}" in
+            *.cbt|*.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar)
+                         tar xvf "$n"       ;;
+            *.lzma)      unlzma ./"$n"      ;;
+            *.bz2)       bunzip2 ./"$n"     ;;
+            *.cbr|*.rar)       unrar x -ad ./"$n" ;;
+            *.gz)        gunzip ./"$n"      ;;
+            *.cbz|*.epub|*.zip)       unzip ./"$n"       ;;
+            *.z)         uncompress ./"$n"  ;;
+            *.7z|*.arj|*.cab|*.cb7|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.pkg|*.rpm|*.udf|*.wim|*.xar)
+                         7z x ./"$n"        ;;
+            *.xz)        unxz ./"$n"        ;;
+            *.exe)       cabextract ./"$n"  ;;
+            *.cpio)      cpio -id < ./"$n"  ;;
+            *.cba|*.ace)      unace x ./"$n"      ;;
+            *)
+                         echo "ex: '$n' - unknown archive method"
+                         return 1
+                         ;;
+          esac
+      else
+          echo "'$n' - file does not exist"
+          return 1
+      fi
+    done
+fi
+}
+
+# ---------------
+# compile and run
+# ---------------
+run() {
+    if [ -z "$1" ]; then
+        echo "Usage: run_file <file_name>"
+        return 1
+    fi
+
+    filename="$1"
+
+    if [[ ! -f "$filename" ]]; then
+        echo "Error: File '$filename' does not exist!"
+        return 1
+    fi
+
+    extension="${filename##*.}"
+    basename="${filename%.*}"
+
+    case "$extension" in
+        "cpp") 
+            echo "Compiling C++ file..."
+            g++ -o "$basename" "$filename" && echo "Compiled! Running..." && ./"$basename"
+            ;;
+        "c") 
+            echo "Compiling C file..."
+            gcc -o "$basename" "$filename" && echo "Compiled! Running..." && ./"$basename"
+            ;;
+        "lua") 
+            echo "Running Lua script..."
+            lua "$filename"
+            ;;
+        "py") 
+            echo "Running Python script..."
+            python3 "$filename"
+            ;;
+        "tex") 
+            echo "Building LaTeX document..."
+            pdflatex "$filename" && echo "PDF generated: ${basename}.pdf"
+            ;;
+        "md") 
+            echo "Opening Markdown preview..."
+            marksman preview "$filename"
+            ;;
+        "toml") 
+            echo "Validating TOML file..."
+            taplo format --config "$filename"
+            ;;
+        "xml") 
+            echo "Validating XML file..."
+            lemminx "$filename"
+            ;;
+        "sh") 
+            echo "Making script executable..."
+            chmod +x "$filename" && echo "Running Bash script..." && "./$filename"
+            ;;
+        "rs") 
+            echo "Compiling Rust file..."
+            rustc "$filename" -o "$basename" && echo "Compiled! Running..." && ./"$basename"
+            ;;
+        "go") 
+            echo "Compiling Go file..."
+            go build -o "$basename" "$filename" && echo "Compiled! Running..." && ./"$basename"
+            ;;
+        *) 
+            echo "Unknown file type: $filename"
+            return 1
+            ;;
+    esac
+}
+
+
+# ----
+# 3->4
+# ----
+ffmpeg-run() {
+    echo "🔄 Konvertiere alle Videos in $2-Format..."
+    for file in *.{mp4,mkv,avi,webm,flv,mov,wmv}; do
+        ffmpeg -i "$file" -vn -acodec "$2" "${file%.*}.$2"
+    done
+    echo "✅ Fertig! Alle Videos wurden in $2 umgewandelt."
+}
+
+# ---------------------------
+# ... and go to the directory
+# ---------------------------
+cg ()
+{
+	if [ -d "$2" ];then
+		pycp $1 $2 && z $2
+	else
+		pycp $1 $2
+	fi
+}
+
+mvg ()
+{
+	if [ -d "$2" ];then
+		pymv $1 $2 && z $2
+	else
+		pymv $1 $2
+	fi
+}
+
+mdg ()
+{
+	mkdir -p $1
+	z $1
+}
+
+# -------
+# convert
+# -------
+function convert {
+  if [ -z "$1" ]; then
+    echo "Usage: convert <file> <to: pdf|html|docx|tex|epub|md|txt|rtf|odt|beamer|slidy|man|jats|asciidoc|org|commonmark|revealjs|markdown_mmd|json>"
+    return 1
+  fi
+
+  INPUT="$1"
+  FORMAT="$2"
+  BASE="${INPUT%.*}"
+  [ -z "$FORMAT" ] && FORMAT=$(printf "%s\n" pdf html docx tex epub md txt rtf odt beamer slidy man jats asciidoc org commonmark revealjs markdown_mmd json | /usr/bin/fzf --prompt="📄 Ausgabeformat wählen: ")
+  case "$FORMAT" in
+    pdf) pandoc "$INPUT" -o "$BASE.pdf" --pdf-engine=tectonic --toc --standalone ;;
+    html) pandoc "$INPUT" -o "$BASE.html" --standalone ;;
+    docx) pandoc "$INPUT" -o "$BASE.docx" ;;
+    tex) pandoc "$INPUT" -o "$BASE.tex" ;;
+    epub) pandoc "$INPUT" -o "$BASE.epub" ;;
+    md) pandoc "$INPUT" -o "$BASE.md" ;;
+    txt) pandoc "$INPUT" -t plain -o "$BASE.txt" ;;
+    rtf) pandoc "$INPUT" -o "$BASE.rtf" ;;
+    odt) pandoc "$INPUT" -o "$BASE.odt" ;;
+    beamer) pandoc "$INPUT" -t beamer -o "$BASE.pdf" --pdf-engine=lualatex ;;
+    slidy) pandoc "$INPUT" -t slidy -o "$BASE.html" ;;
+    man) pandoc "$INPUT" -s -t man -o "$BASE.1" ;;
+    jats) pandoc "$INPUT" -t jats -o "$BASE.xml" ;;
+    asciidoc) pandoc "$INPUT" -t asciidoc -o "$BASE.adoc" ;;
+    org) pandoc "$INPUT" -t org -o "$BASE.org" ;;
+    commonmark) pandoc "$INPUT" -t commonmark -o "$BASE.md" ;;
+    revealjs) pandoc "$INPUT" -t revealjs -s -o "$BASE.html" ;;
+    markdown_mmd) pandoc "$INPUT" -t markdown_mmd -o "$BASE.mmd" ;;
+    json) pandoc "$INPUT" -t json -o "$BASE.json" ;;
+    *)
+      echo "convert: unknown output format '$FORMAT'"
+      return 1 ;;
+esac
+
+  echo "✅ Konvertiert: $INPUT → $BASE.$FORMAT"
+}
+
+# ---------
+# Translate
+# ---------
+ont() {
+  local langs=( "de:Deutsch" "en:Englisch" "fr:Französisch" "es:Spanisch" "it:Italienisch" "tr:Türkisch" "ru:Russisch" "nl:Niederländisch" )
+
+  local ziel=$(printf "%s\n" "${langs[@]}" | /usr/bin/fzf --header="Zielsprache wählen" | cut -d':' -f1)
+  [[ -z "$ziel" ]] && echo "Keine Sprache ausgewählt." && return 1
+  read -rp "  Text eingeben: " input
+  [[ -z "$input" ]] && echo "Kein Text eingegeben." && return 1
+
+  trans -brief ":$ziel" <<< "$input"
+}
+
