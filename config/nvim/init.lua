@@ -322,11 +322,6 @@ vim.api.nvim_set_keymap('n', '<leader>dr', ':DapRestart<CR>', { noremap = true, 
 vim.api.nvim_set_keymap('n', '<leader>dx', ':DapTerminate<CR>', { noremap = true, silent = true })
 
 -- ===================================
--- Navigation mit Tmux
--- ===================================
-vim.api.nvim_set_keymap('n', '<C-h>', ':TmuxNavigateLeft<CR>', { noremap = true, silent = true })
-
--- ===================================
 -- Leader-Key Konfiguration
 -- ===================================
 vim.g.mapleader = " "
