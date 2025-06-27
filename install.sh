@@ -8,3 +8,7 @@ chmod +x scripts/po.sh
 chmod +x scripts/sort.sh
 ./dependency.sh
 ./config.sh
+mv ~/bashrc ~/.bashrc
+mv ~/bash_if ~/.bash_if
+mv ~/bash_aliases ~/.bash_aliases
+mv ~/nerdfont.txt ~/.nerdfont.txt
