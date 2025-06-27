@@ -54,7 +54,7 @@ fi
 # -------
 # install
 # -------
-yay -S wayland qt5-wayland qt6-wayland swayfx qutebrowser kitty wlogout waybar rofi-wayland yazi mpvpaper newsboat zoxide bat htop neovim fastfetch hyfetch exa fzf w3m httrack yt-dlp calcure bluetui navi podman 7zip zip xz clang lua rust go ffmpeg pandoc translate-shell pycp battop pulsemixer ani-cli-git lobster-git starship thefuck less python impala navi dysk foot astroterm-bin mpv pass ollama virt-manager libreoffice ttf-firacode-nerd 
+yay -S wayland gnudb qt5-wayland qt6-wayland swayfx qutebrowser kitty wlogout waybar rofi-wayland yazi mpvpaper newsboat zoxide bat htop neovim fastfetch hyfetch exa fzf w3m httrack yt-dlp calcure bluetui navi podman 7zip zip xz clang lua rust go ffmpeg pandoc translate-shell pycp battop pulsemixer ani-cli-git lobster-git starship thefuck less python impala navi dysk foot astroterm-bin mpv pass ollama virt-manager libreoffice ttf-firacode-nerd 
 
 # -----------
 # pip & cargo
