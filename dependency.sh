@@ -6,33 +6,37 @@
 git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git
 make -C ble.sh install PREFIX=~/.local
 
+
 # ----------
-# caotic aur
+# Chaotic-AUR
 # ----------
 set -euo pipefail
 
 echo "==> Importing Chaotic-AUR GPG key..."
-su -c "pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com"
-su -c "pacman-key --lsign-key 3056513887B78AEB"
+sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+sudo pacman-key --lsign-key 3056513887B78AEB
 
 echo "==> Installing Chaotic-AUR keyring and mirrorlist..."
-su -c "pacman -U --noconfirm \
+sudo pacman -U --noconfirm \
   https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst \
-  https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst"
+  https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst
 
-echo "==> Adding Chaotic-AUR to /etc/pacman.conf (if needed)..."
+echo "==> Adding Chaotic-AUR to /etc/pacman.conf (if not already present)..."
 if ! grep -q '^
 
 \[chaotic-aur\]
 
 ' /etc/pacman.conf; then
-  su -c "bash -c 'echo -e \"\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\" >> /etc/pacman.conf'"
+  echo -e "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" | sudo tee -a /etc/pacman.conf > /dev/null
 else
-  echo "Chaotic-AUR already present in pacman.conf."
+  echo "Chaotic-AUR is already present in pacman.conf."
 fi
 
-echo "==> Updating system and syncing mirrorlist..."
-su -c "pacman -Syu"
+echo "==> Updating package database..."
+sudo pacman -Sy
+
+echo "Chaotic-AUR has been successfully set up."
+
 
 # ---
 # yay
