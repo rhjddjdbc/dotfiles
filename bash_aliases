@@ -205,7 +205,7 @@ alias g-ver='gpg --verify'
 # -------
 alias off="clear; ~/ascii/pc.sh; sleep 5 && shutdown -h now"
 alias tux="~/ascii/tux.sh"
-alias pomo="nohup ~/Code/sh/po.sh >/dev/null 2>&1 &"
+alias pomo="nohup ~/scripts/po.sh >/dev/null 2>&1 &"
 alias icon="bat ~/.nerdfont.txt | /usr/bin/fzf --ansi --preview='echo {} | cut -d\" \" -f1' --preview-window=up:1 | awk '{print \$1}' | wl-copy"
 
 # ---------
