@@ -1,4 +1,4 @@
-#﻿# creadits
+﻿# creadits
 ### https://github.com/addy-dclxvi/i3-starterpack
 ### https://github.com/jameswylde/wypr-hyprland
 ### https://github.com/sameemul-haque/dotfiles
