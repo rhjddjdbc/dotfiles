@@ -185,7 +185,7 @@ function convert {
       return 1 ;;
 esac
 
-  echo "✅ Konvertiert: $INPUT → $BASE.$FORMAT"
+  echo "Konvertiert: $INPUT → $BASE.$FORMAT"
 }
 
 # ---------
