@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# Ordner, die überwacht werden sollen (volle Pfade)
 directories=("$HOME/Bilder" "$HOME/Dokumente" "$HOME/Code")
 downloads_directory="$HOME/Downloads"
 
-# Funktion zum Sortieren der Dateien
 sort_files() {
     for dir in "${directories[@]}"; do
         for file in "$dir"/*; do
@@ -29,7 +27,6 @@ sort_files() {
     done
 }
 
-# Funktion zum Sortieren der Dateien im Download-Verzeichnis
 sort_downloads() {
     for file in "$downloads_directory"/*; do
         if [[ -f "$file" ]]; then
@@ -52,7 +49,6 @@ sort_downloads() {
     done
 }
 
-# Endlosschleife, die verschiedene Intervalle verwendet
 while true; do
     sort_files
     sleep 30
