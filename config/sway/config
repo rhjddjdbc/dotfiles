@@ -44,7 +44,6 @@ smart_gaps off
 
 exec_always --no-startup-id /home/sascha/Code/sh/sort.sh
 exec_always --no-startup-id /home/sascha/Code/sh/paper.sh
-exec_always --no-startup-id /home/sascha/Code/sh/dis.sh
 exec_always autotiling-rs
 exec_always mako
 
