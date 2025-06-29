@@ -1,32 +1,32 @@
--- ===================================
--- Packer als Plugin-Manager verwenden
--- ===================================
+-- ========================
+-- Packer as Plugin-Manager
+-- ========================
 vim.cmd([[packadd packer.nvim]])
 
 require('packer').startup(function(use)
   -- Packer selbst verwalten
   use 'wbthomason/packer.nvim'
 
-  -- ===================================
+  -- ===========
   -- LSP & Tools
-  -- ===================================
+  -- ===========
   use 'neovim/nvim-lspconfig'
   use 'williamboman/mason.nvim'
   use 'williamboman/mason-lspconfig.nvim'
   use {
     "NeogitOrg/neogit",
     requires = {
-      "nvim-lua/plenary.nvim", -- Abhängigkeit für Neogit
-      "sindrets/diffview.nvim" -- Optional: Diff-Ansicht
+      "nvim-lua/plenary.nvim", 
+      "sindrets/diffview.nvim"
     }
   }
   use 'nvim-neotest/nvim-nio'
   use 'ray-x/go.nvim'
   use 'ray-x/guihua.lua'
 
-  -- ===================================
-  -- Suche, Notizen, Wiki
-  -- ===================================
+  -- ==================
+  -- Search, Note, Wiki
+  -- ==================
   use "nvim-telescope/telescope.nvim"
   use "nvim-lua/plenary.nvim"
   use "vimwiki/vimwiki"
@@ -37,9 +37,9 @@ require('packer').startup(function(use)
   }
   use 'lervag/vimtex'
 
-  -- ===================================
+  -- ==========
   -- Theme & UI
-  -- ===================================
+  -- ==========
   use 'Mofiqul/dracula.nvim'
   use {
      "nvim-lualine/lualine.nvim",
@@ -54,24 +54,24 @@ require('packer').startup(function(use)
   use "nvim-tree/nvim-web-devicons"
   use "stevearc/dressing.nvim"
 
-  -- ===================================
+  -- ==============
   -- DAP: Debugging
-  -- ===================================
+  -- ==============
   use 'mfussenegger/nvim-dap'
   use 'rcarriga/nvim-dap-ui'
 
-  -- ===================================
+  -- ============
   -- Autocomplete
-  -- ===================================
+  -- ============
   use {'hrsh7th/nvim-cmp'}
   use {'hrsh7th/cmp-nvim-lsp'}
   use {'hrsh7th/cmp-buffer'}
   use {'hrsh7th/cmp-path'}
   use 'nvim-lua/lsp-status.nvim'
 
-  -- ===================================
+  -- ==================
   -- Ollama Integration
-  -- ===================================
+  -- ==================
   use {
       "nomnivore/ollama.nvim",
       requires = { "nvim-lua/plenary.nvim" },
@@ -94,9 +94,9 @@ require('packer').startup(function(use)
   }
 end)
 
--- ===================================
+-- ===========
 -- Mason Setup
--- ===================================
+-- ===========
 require("mason").setup()
 require("mason-lspconfig").setup({
   ensure_installed = {
@@ -105,22 +105,22 @@ require("mason-lspconfig").setup({
   }
 })
 
--- ===================================
--- Treesitter Konfiguration
--- ===================================
+-- ========================
+-- Treesitter configuration
+-- ========================
 require('nvim-treesitter.configs').setup {
   ensure_installed = { "lua", "python", "c", "cpp", "rust", "bash", "markdown", "toml" },
   highlight = { enable = true },
 }
 
--- ===================================
--- Farben & Theme
--- ===================================
+-- =============
+-- color & Theme
+-- =============
 vim.cmd[[colorscheme dracula]]
 
--- ===================================
--- LSP Konfiguration
--- ===================================
+-- =================
+-- LSP configuration
+-- =================
 local lspconfig = require('lspconfig')
 lspconfig.lua_ls.setup({})
 lspconfig.pyright.setup({})
@@ -133,9 +133,9 @@ lspconfig.lemminx.setup({})
 lspconfig.bashls.setup({})
 lspconfig.gopls.setup({})
 
--- ===================================
--- Startbildschirm mit Alpha
--- ===================================
+-- ===========
+-- Startscreen
+-- ===========
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
 
@@ -169,9 +169,9 @@ dashboard.section.buttons.val = {
 dashboard.config.opts.noautocmd = true
 alpha.setup(dashboard.config)
 
--- ===================================
--- Zeilennummern & Cursor
--- ===================================
+-- ======
+-- Cursor
+-- ======
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.numberwidth = 6
@@ -185,9 +185,9 @@ vim.api.nvim_exec([[
   augroup END
 ]], false)
 
--- ===================================
+-- =============
 -- Lualine Setup
--- ===================================
+-- =============
 require('lualine').setup {
   options = {
     icons_enabled = true,
@@ -204,18 +204,18 @@ require('lualine').setup {
   }
 }
 
--- ===================================
+-- =============
 -- Vimwiki Setup
--- ===================================
+-- =============
 vim.g.vimwiki_list = {{
   path = '~/wiki',
   syntax = 'markdown',
   ext = '.md'
 }}
 
--- ===================================
--- DAP & UI Konfiguration
--- ===================================
+-- ======================
+-- DAP & UI configuration
+-- ======================
 local dap = require('dap')
 local dapui = require('dapui')
 
@@ -243,10 +243,9 @@ dap.adapters.python = {
   args = {'-m', 'debugpy.adapter'},
 }
 
--- Mehr Debug-Setups folgen hier wie bei Rust, Go, Python...
--- ===================================
--- Debug-Konfiguration: Rust
--- ===================================
+-- =========================
+-- Debug-configuration: Rust
+-- =========================
 dap.configurations.rust = {
   {
     name = "Rust Debugging",
@@ -261,7 +260,7 @@ dap.configurations.rust = {
 }
 
 -- ===================================
--- Debug-Konfiguration: C
+-- Debug-configuration: C
 -- ===================================
 dap.configurations.c = {
   {
@@ -277,12 +276,12 @@ dap.configurations.c = {
 }
 
 -- ===================================
--- Debug-Konfiguration: C++
+-- Debug-configuration: C++
 -- ===================================
 dap.configurations.cpp = dap.configurations.c
 
 -- ===================================
--- Debug-Konfiguration: Go
+-- Debug-configuration: Go
 -- ===================================
 dap.configurations.go = {
   {
@@ -296,7 +295,7 @@ dap.configurations.go = {
 }
 
 -- ===================================
--- Debug-Konfiguration: Python
+-- Debug-configuration: Python
 -- ===================================
 dap.configurations.python = {
   {
@@ -312,7 +311,7 @@ dap.configurations.python = {
   }
 }
 -- ===================================
--- Debugging-Tastenkombinationen
+-- Debugging-key
 -- ===================================
 vim.api.nvim_set_keymap('n', '<leader>dt', ':DapToggleBreakpoint<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>dc', ':DapContinue<CR>', { noremap = true, silent = true })
@@ -322,26 +321,26 @@ vim.api.nvim_set_keymap('n', '<leader>dr', ':DapRestart<CR>', { noremap = true, 
 vim.api.nvim_set_keymap('n', '<leader>dx', ':DapTerminate<CR>', { noremap = true, silent = true })
 
 -- ===================================
--- Leader-Key Konfiguration
+-- Leader-Key configuration
 -- ===================================
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- ===================================
--- 📖 VimWiki (Notizen & Wiki)
+-- VimWiki (Notizen & Wiki)
 -- ===================================
 vim.api.nvim_set_keymap('n', '<leader>ww', ':VimwikiIndex<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>wd', ':VimwikiMakeDiaryNote<CR>', { noremap = true, silent = true })
 
 -- ===================================
--- 🚀 Packer (Plugin-Manager)
+-- Packer (Plugin-Manager)
 -- ===================================
 vim.api.nvim_set_keymap('n', '<leader>ps', ':PackerSync<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>pi', ':PackerInstall<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>pc', ':PackerClean<CR>', { noremap = true, silent = true })
 
 -- ===================================
--- 🔍 Telescope (Fuzzy Finder)
+-- Telescope (Fuzzy Finder)
 -- ===================================
 vim.api.nvim_set_keymap('n', '<leader>ff', ':Telescope find_files<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fg', ':Telescope live_grep<CR>', { noremap = true, silent = true })
@@ -349,7 +348,6 @@ vim.api.nvim_set_keymap('n', '<leader>fb', ':Telescope buffers<CR>', { noremap =
 vim.api.nvim_set_keymap('n', '<leader>fh', ':Telescope help_tags<CR>', { noremap = true, silent = true })
 
 -- ===================================
--- Optionen für Keymap-- Debugging-Tastenkombinationen
 vim.api.nvim_set_keymap('n', '<leader>dt', ':DapToggleBreakpoint<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>dc', ':DapContinue<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>do', ':DapStepOver<CR>', { noremap = true, silent = true })
@@ -359,20 +357,19 @@ vim.api.nvim_set_keymap('n', '<leader>dx', ':DapTerminate<CR>', { noremap = true
 
 vim.api.nvim_set_keymap('n', '<C-h>', ':TmuxNavigateLeft<CR>', { noremap = true, silent = true })
 
--- Leader-Key setzen auf Space
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- 📖 VimWiki (Notizen & Wiki)
+-- VimWiki (Notizen & Wiki)
 vim.api.nvim_set_keymap('n', '<leader>ww', ':VimwikiIndex<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>wd', ':VimwikiMakeDiaryNote<CR>', { noremap = true, silent = true })
 
--- 🚀 Packer (Plugin-Manager)
+-- Packer (Plugin-Manager)
 vim.api.nvim_set_keymap('n', '<leader>ps', ':PackerSync<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>pi', ':PackerInstall<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>pc', ':PackerClean<CR>', { noremap = true, silent = true })
 
--- 🔍 Telescope (Fuzzy Finder)
+-- Telescope (Fuzzy Finder)
 vim.api.nvim_set_keymap('n', '<leader>ff', ':Telescope find_files<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fg', ':Telescope live_grep<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fb', ':Telescope buffers<CR>', { noremap = true, silent = true })
