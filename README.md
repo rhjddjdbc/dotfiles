@@ -8,11 +8,11 @@
 ## pic 
 ![Screenshot](screenshot-1750861747.png)
 
-# Welcome to my custom Linux setup: fast, stylish, keyboard-centric, and dark-themed. These dotfiles configure a complete Wayland workflow with **SwayFX**, **Foot**, **Kitty**, **Neovim**, **Bash**, and more—wrapped in a unified **Dracula color scheme**.
+# keyboard-centric, and dark-themed. **SwayFX**, **Foot**, **Kitty**, **Neovim**, **Bash**... in unified **Dracula color scheme**.
 
 ---
 
-## ✦ Window Manager: SwayFX
+## Window Manager: SwayFX
 
 A sleek Wayland tiling setup with **SwayFX** (fork of Sway) enabling blur, rounded corners, and vibrancy.
 
@@ -29,7 +29,7 @@ A sleek Wayland tiling setup with **SwayFX** (fork of Sway) enabling blur, round
 
 ---
 
-## ✦ Status Bar: Waybar
+## Status Bar: Waybar
 
 Customized **Waybar** with Dracula colors. Modules include:
 - Clock
@@ -39,7 +39,7 @@ Customized **Waybar** with Dracula colors. Modules include:
 
 ---
 
-## ✦ Application Launcher: Rofi
+## Application Launcher: Rofi
 
 Rofi is styled with Dracula theme:
 - App launching
@@ -47,10 +47,10 @@ Rofi is styled with Dracula theme:
 
 ---
 
-## ✦ Terminal Emulators: Kitty & Foot
+## Terminal Emulators: Kitty & Foot
 
 - **Kitty**: used in tiling windows and workspace 1  
-- **Foot**: lightweight alternative, also themed in Dracula
+- **Foot**: lightweight alternative, also themed in Dracula (used in Scripting and on click actions)
 
 Both have:
 - Transparent backgrounds
@@ -59,7 +59,7 @@ Both have:
 
 ---
 
-## ✦ Code Editor: Neovim
+## Code Editor: Neovim
 
 Full-fledged **Neovim IDE** configuration (Lua-based) with:
 - Dracula colorscheme (`dracula.nvim`)
@@ -74,7 +74,7 @@ Full-fledged **Neovim IDE** configuration (Lua-based) with:
 
 ---
 
-## ✦ File Manager: Yazi
+## File Manager: Yazi
 
 Modern terminal file manager with:
 - Vim-style navigation
@@ -83,7 +83,7 @@ Modern terminal file manager with:
 
 ---
 
-## ✦ Newsfeed: Newsboat
+## Newsfeed: Newsboat
 
 Text-based feed reader with:
 - Dracula-styled color configuration
@@ -91,7 +91,7 @@ Text-based feed reader with:
 
 ---
 
-## ✦ Browser: Qutebrowser
+## Browser: Qutebrowser
 
 Minimal, keyboard-first browser with:
 - Dracula stylesheet and color hints
@@ -100,7 +100,7 @@ Minimal, keyboard-first browser with:
 
 ---
 
-## ✦ Bash Shell
+## Bash Shell
 
 Supercharged Bash setup with:
 - Vi-mode (`set -o vi`)
@@ -117,17 +117,17 @@ Supercharged Bash setup with:
 
 ---
 
-## ✦ Wlogout Integration
+## Wlogout Integration
 
 Used for Rofi and Waybar power menus:
 - Logout, shutdown, reboot, suspend
 
 ---
 
-## ✦ Custom Scripts
+## Custom Scripts
 
 ### `paper.sh`
-Randomly sets a video wallpaper using `mpvpaper`:
+Randomly sets a video wallpaper using `mpvpaper`
 
-### sort.sh
-Organizes documents, pictures, code, and downloads by file extension:
+### `sort.sh`
+Organizes documents, pictures, code, and downloads by file extension: pdf, txt...
