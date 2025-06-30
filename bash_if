@@ -113,11 +113,11 @@ run() {
 # 3->4
 # ----
 ffmpeg-run() {
-    echo "🔄 Konvertiere alle Videos in $2-Format..."
+    echo "convert $2-Format..."
     for file in *.{mp4,mkv,avi,webm,flv,mov,wmv}; do
         ffmpeg -i "$file" -vn -acodec "$2" "${file%.*}.$2"
     done
-    echo "✅ Fertig! Alle Videos wurden in $2 umgewandelt."
+    echo "done $2"
 }
 
 # ---------------------------
@@ -195,9 +195,9 @@ ont() {
   local langs=( "de:Deutsch" "en:Englisch" "fr:Französisch" "es:Spanisch" "it:Italienisch" "tr:Türkisch" "ru:Russisch" "nl:Niederländisch" )
 
   local ziel=$(printf "%s\n" "${langs[@]}" | /usr/bin/fzf --header="Zielsprache wählen" | cut -d':' -f1)
-  [[ -z "$ziel" ]] && echo "Keine Sprache ausgewählt." && return 1
-  read -rp "  Text eingeben: " input
-  [[ -z "$input" ]] && echo "Kein Text eingegeben." && return 1
+  [[ -z "$ziel" ]] && echo "Chose Language." && return 1
+  read -rp "  Text: " input
+  [[ -z "$input" ]] && echo "No Text input.." && return 1
 
   trans -brief ":$ziel" <<< "$input"
 }
