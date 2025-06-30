@@ -1,10 +1,10 @@
 #!/bin/bash
 
-echo "📁 Wechsle in ~/dotfiles..."
+echo "cd in ~/dotfiles..."
 cd ~/dotfiles || { echo "❌ Fehler: Verzeichnis ~/dotfiles nicht gefunden."; exit 1; }
 
-echo "🔁 Kopiere alle Dateien nach ~ ..."
+echo "cp in to ~ ..."
 /usr/bin/cp -av . ~/
 
-echo "✅ Dotfiles erfolgreich nach ~ kopiert."
+echo  ":)"
 
