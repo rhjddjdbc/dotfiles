@@ -13,8 +13,7 @@ menu(){
     printf "3. Anime Lofi\n"
     printf "4. The Bootleg Boy\n"
     printf "5. Nightcore Rock\n"
-    printf "6. Fear &\n"
-    printf "7. Darknet diary\n"
+    printf "6. Darknet diary\n"
 }
 
 get_choice() {
@@ -59,12 +58,7 @@ main() {
             ADDITIONAL_ARGS=""
 	    PLAYER="mpvpaper"
             ;;
-        "6. Fear &")
-            URL="https://www.youtube.com/@FearAndPodcast/podcasts"
-            ADDITIONAL_ARGS="--no-video --shuffle"
-	    PLAYER="mpv"
-            ;;
-        "7. Darknet diary")
+        "6. Darknet diary")
             URL="https://www.youtube.com/@JackRhysider/podcasts"
             ADDITIONAL_ARGS=""
 	    PLAYER="mpvpaper"
