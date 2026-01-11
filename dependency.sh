@@ -79,7 +79,7 @@ setup_doas_and_remove_sudo() {
     sudo pacman -S --noconfirm opendoas
 
     echo "Creating /etc/doas.conf..."
-    echo 'permit persist :wheel' | sudo tee /etc/doas.conf > /dev/null
+    echo 'permit :wheel' | sudo tee /etc/doas.conf > /dev/null
   fi
 
   echo "Removing sudo..."
