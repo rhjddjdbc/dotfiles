@@ -10,7 +10,7 @@ require('packer').startup(function(use)
   -- ===========
   -- LSP & Tools
   -- ===========
-  use 'neovim/nvim-lspconfig'   -- still used for Mason integration, not for setup
+  use 'neovim/nvim-lspconfig'   -- still needed for Mason-LSP integration (not for manual setup)
   use 'williamboman/mason.nvim'
   use 'williamboman/mason-lspconfig.nvim'
   use {
@@ -109,14 +109,20 @@ require('packer').startup(function(use)
   use 'christoomey/vim-tmux-navigator'
 
   -- ===========
-  -- Mason Setup
+  -- Mason Setup (Native LSP integration, no deprecation warning)
   -- ===========
   require("mason").setup()
   require("mason-lspconfig").setup({
     ensure_installed = {
       "lua_ls", "pyright", "clangd", "texlab",
       "marksman", "taplo", "lemminx", "bashls", "gopls"
-    }
+    },
+    handlers = {
+      -- The default handler calls vim.lsp.enable() for each installed server
+      function(server_name)
+        vim.lsp.enable(server_name)
+      end,
+    },
   })
 end)
 
@@ -124,21 +130,6 @@ end)
 -- color & Theme
 -- =============
 vim.cmd[[colorscheme dracula]]
-
--- =================
--- LSP configuration (Neovim 0.11+ native API)
--- =================
-local lspconfig = require('lspconfig')          -- only for Mason's default configs
-local lsp_servers = {
-  'lua_ls', 'pyright', 'clangd', 'texlab',
-  'marksman', 'taplo', 'lemminx', 'bashls', 'gopls'
-}
-
-for _, server in ipairs(lsp_servers) do
-  -- Let mason-lspconfig set up the default config, then use vim.lsp.enable
-  lspconfig[server].setup({})
-  vim.lsp.enable(server)
-end
 
 -- ===========
 -- Startscreen
