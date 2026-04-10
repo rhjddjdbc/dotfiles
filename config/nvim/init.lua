@@ -4,19 +4,19 @@
 vim.cmd([[packadd packer.nvim]])
 
 require('packer').startup(function(use)
-  -- Packer selbst verwalten
+  -- Packer manages itself
   use 'wbthomason/packer.nvim'
 
   -- ===========
   -- LSP & Tools
   -- ===========
-  use 'neovim/nvim-lspconfig'
+  use 'neovim/nvim-lspconfig'   -- still used for Mason integration, not for setup
   use 'williamboman/mason.nvim'
   use 'williamboman/mason-lspconfig.nvim'
   use {
     "NeogitOrg/neogit",
     requires = {
-      "nvim-lua/plenary.nvim", 
+      "nvim-lua/plenary.nvim",
       "sindrets/diffview.nvim"
     }
   }
@@ -42,15 +42,15 @@ require('packer').startup(function(use)
   -- ==========
   use 'Mofiqul/dracula.nvim'
   use {
-     "nvim-lualine/lualine.nvim",
-     requires = { "binhtran432k/dracula.nvim" },
-     config = function()
-         require("lualine").setup({
-             options = { theme = "dracula" }
-         })
-     end
+    "nvim-lualine/lualine.nvim",
+    requires = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("lualine").setup({
+        options = { theme = "dracula" }
+      })
+    end
   }
-  use {'goolord/alpha-nvim'}
+  use 'goolord/alpha-nvim'
   use "nvim-tree/nvim-web-devicons"
   use "stevearc/dressing.nvim"
 
@@ -59,59 +59,66 @@ require('packer').startup(function(use)
   -- ==============
   use 'mfussenegger/nvim-dap'
   use 'rcarriga/nvim-dap-ui'
+  use {
+    'leoluz/nvim-dap-go',
+    config = function()
+      require('dap-go').setup()
+    end
+  }
 
   -- ============
   -- Autocomplete
   -- ============
-  use {'hrsh7th/nvim-cmp'}
-  use {'hrsh7th/cmp-nvim-lsp'}
-  use {'hrsh7th/cmp-buffer'}
-  use {'hrsh7th/cmp-path'}
+  use 'hrsh7th/nvim-cmp'
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
   use 'nvim-lua/lsp-status.nvim'
 
   -- ==================
   -- Ollama Integration
   -- ==================
   use {
-      "nomnivore/ollama.nvim",
-      requires = { "nvim-lua/plenary.nvim" },
-      config = function()
-          require("ollama").setup({
-              model = "qwen2.5-coder:0.5b",
-              url = "http://127.0.0.1:11434"
-          })
-      end
+    "nomnivore/ollama.nvim",
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("ollama").setup({
+        model = "qwen2.5-coder:0.5b",
+        url = "http://127.0.0.1:11434"
+      })
+    end
   }
 
-  -- ===================================
+  -- ==========================
   -- Syntax Highlighting (Treesitter)
-  -- ===================================
+  -- ==========================
   use {
     'nvim-treesitter/nvim-treesitter',
     run = function()
-      require('nvim-treesitter.install').update({with_sync = true})
+      require('nvim-treesitter.install').update({ with_sync = true })
+    end,
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        ensure_installed = { "lua", "python", "c", "cpp", "rust", "bash", "markdown", "toml" },
+        highlight = { enable = true },
+      }
     end
   }
+
+  -- Tmux navigation
+  use 'christoomey/vim-tmux-navigator'
+
+  -- ===========
+  -- Mason Setup
+  -- ===========
+  require("mason").setup()
+  require("mason-lspconfig").setup({
+    ensure_installed = {
+      "lua_ls", "pyright", "clangd", "texlab",
+      "marksman", "taplo", "lemminx", "bashls", "gopls"
+    }
+  })
 end)
-
--- ===========
--- Mason Setup
--- ===========
-require("mason").setup()
-require("mason-lspconfig").setup({
-  ensure_installed = {
-    "lua_ls", "pyright", "clangd", "texlab",
-    "marksman", "taplo", "lemminx", "bashls"
-  }
-})
-
--- ========================
--- Treesitter configuration
--- ========================
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { "lua", "python", "c", "cpp", "rust", "bash", "markdown", "toml" },
-  highlight = { enable = true },
-}
 
 -- =============
 -- color & Theme
@@ -119,19 +126,19 @@ require('nvim-treesitter.configs').setup {
 vim.cmd[[colorscheme dracula]]
 
 -- =================
--- LSP configuration
+-- LSP configuration (Neovim 0.11+ native API)
 -- =================
-local lspconfig = require('lspconfig')
-lspconfig.lua_ls.setup({})
-lspconfig.pyright.setup({})
-lspconfig.clangd.setup({})
-lspconfig.rust_analyzer.setup({})
-lspconfig.texlab.setup({})
-lspconfig.marksman.setup({})
-lspconfig.taplo.setup({})
-lspconfig.lemminx.setup({})
-lspconfig.bashls.setup({})
-lspconfig.gopls.setup({})
+local lspconfig = require('lspconfig')          -- only for Mason's default configs
+local lsp_servers = {
+  'lua_ls', 'pyright', 'clangd', 'texlab',
+  'marksman', 'taplo', 'lemminx', 'bashls', 'gopls'
+}
+
+for _, server in ipairs(lsp_servers) do
+  -- Let mason-lspconfig set up the default config, then use vim.lsp.enable
+  lspconfig[server].setup({})
+  vim.lsp.enable(server)
+end
 
 -- ===========
 -- Startscreen
@@ -161,9 +168,9 @@ dashboard.section.header.val = {
   " `''                                                                      `''",
 }
 dashboard.section.buttons.val = {
-  dashboard.button("f ","  Datei suchen", ":Telescope find_files<CR>"),
-  dashboard.button("e ","  Neue Datei erstellen", ":ene <BAR> startinsert<CR>"),
-  dashboard.button("q ","  Neovim beenden", ":qa<CR>"),
+  dashboard.button("f ", "  Find file", ":Telescope find_files<CR>"),
+  dashboard.button("e ", "  New file", ":ene <BAR> startinsert<CR>"),
+  dashboard.button("q ", "  Quit Neovim", ":qa<CR>"),
 }
 
 dashboard.config.opts.noautocmd = true
@@ -178,12 +185,10 @@ vim.opt.numberwidth = 6
 vim.opt.cursorline = true
 vim.cmd([[highlight CursorLineNr guifg=#ff6600 guibg=NONE]])
 
-vim.api.nvim_exec([[
-  augroup BigNumber
-    autocmd!
-    autocmd BufEnter * set numberwidth=6
-  augroup END
-]], false)
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "*",
+  command = "set numberwidth=6",
+})
 
 -- =============
 -- Lualine Setup
@@ -193,6 +198,7 @@ require('lualine').setup {
     icons_enabled = true,
     section_separators = { left = '', right = '' },
     component_separators = { left = '', right = '' },
+    theme = "dracula",
   },
   sections = {
     lualine_a = {'mode'},
@@ -225,6 +231,7 @@ dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open() 
 dap.listeners.before.event_terminated["dapui_config"] = function() dapui.close() end
 dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
 
+-- Adapters
 dap.adapters.gdb = {
   type = 'executable',
   command = 'gdb',
@@ -243,6 +250,8 @@ dap.adapters.python = {
   args = {'-m', 'debugpy.adapter'},
 }
 
+-- Go adapter is already configured by nvim-dap-go's config block above
+
 -- =========================
 -- Debug-configuration: Rust
 -- =========================
@@ -252,7 +261,7 @@ dap.configurations.rust = {
     type = "lldb",
     request = "launch",
     program = function()
-      return vim.fn.input("Pfad zur Rust-Binärdatei: ", vim.fn.getcwd() .. "/", "file")
+      return vim.fn.input("Path to Rust binary: ", vim.fn.getcwd() .. "/", "file")
     end,
     cwd = "${workspaceFolder}",
     stopAtEntry = true,
@@ -264,11 +273,11 @@ dap.configurations.rust = {
 -- ===================================
 dap.configurations.c = {
   {
-    name = "Starten mit GDB",
+    name = "Launch with GDB",
     type = "gdb",
     request = "launch",
     program = function()
-      return vim.fn.input("Pfad zur ausführbaren Datei: ", vim.fn.getcwd() .. "/", "file")
+      return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
     end,
     cwd = "${workspaceFolder}",
     stopAtEntry = true,
@@ -289,7 +298,7 @@ dap.configurations.go = {
     type = "go",
     request = "launch",
     program = function()
-      return vim.fn.input("Pfad zur Go-Datei: ", vim.fn.getcwd() .. "/", "file")
+      return vim.fn.input("Path to Go file: ", vim.fn.getcwd() .. "/", "file")
     end,
   }
 }
@@ -301,80 +310,49 @@ dap.configurations.python = {
   {
     type = "python",
     request = "launch",
-    name = "Starten mit Python-Debugger",
+    name = "Launch Python Debugger",
     program = function()
-      return vim.fn.input("Pfad zur Python-Datei: ", vim.fn.getcwd() .. "/", "file")
+      return vim.fn.input("Path to Python file: ", vim.fn.getcwd() .. "/", "file")
     end,
     pythonPath = function()
       return "/usr/bin/python"
     end,
   }
 }
--- ===================================
--- Debugging-key
--- ===================================
-vim.api.nvim_set_keymap('n', '<leader>dt', ':DapToggleBreakpoint<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>dc', ':DapContinue<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>do', ':DapStepOver<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>di', ':DapStepInto<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>dr', ':DapRestart<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>dx', ':DapTerminate<CR>', { noremap = true, silent = true })
 
 -- ===================================
--- Leader-Key configuration
+-- Key mappings
 -- ===================================
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- ===================================
--- VimWiki (Notizen & Wiki)
--- ===================================
-vim.api.nvim_set_keymap('n', '<leader>ww', ':VimwikiIndex<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>wd', ':VimwikiMakeDiaryNote<CR>', { noremap = true, silent = true })
-
--- ===================================
--- Packer (Plugin-Manager)
--- ===================================
-vim.api.nvim_set_keymap('n', '<leader>ps', ':PackerSync<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>pi', ':PackerInstall<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>pc', ':PackerClean<CR>', { noremap = true, silent = true })
-
--- ===================================
--- Telescope (Fuzzy Finder)
--- ===================================
-vim.api.nvim_set_keymap('n', '<leader>ff', ':Telescope find_files<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fg', ':Telescope live_grep<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fb', ':Telescope buffers<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fh', ':Telescope help_tags<CR>', { noremap = true, silent = true })
-
--- ===================================
-vim.api.nvim_set_keymap('n', '<leader>dt', ':DapToggleBreakpoint<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>dc', ':DapContinue<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>do', ':DapStepOver<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>di', ':DapStepInto<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>dr', ':DapRestart<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>dx', ':DapTerminate<CR>', { noremap = true, silent = true })
-
-vim.api.nvim_set_keymap('n', '<C-h>', ':TmuxNavigateLeft<CR>', { noremap = true, silent = true })
-
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
--- VimWiki (Notizen & Wiki)
-vim.api.nvim_set_keymap('n', '<leader>ww', ':VimwikiIndex<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>wd', ':VimwikiMakeDiaryNote<CR>', { noremap = true, silent = true })
-
--- Packer (Plugin-Manager)
-vim.api.nvim_set_keymap('n', '<leader>ps', ':PackerSync<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>pi', ':PackerInstall<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>pc', ':PackerClean<CR>', { noremap = true, silent = true })
-
--- Telescope (Fuzzy Finder)
-vim.api.nvim_set_keymap('n', '<leader>ff', ':Telescope find_files<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fg', ':Telescope live_grep<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fb', ':Telescope buffers<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fh', ':Telescope help_tags<CR>', { noremap = true, silent = true })
-local opts = { noremap = true, silent = true }
--- ===================================
 local opts = { noremap = true, silent = true }
 
+-- DAP
+vim.api.nvim_set_keymap('n', '<leader>dt', ':DapToggleBreakpoint<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>dc', ':DapContinue<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>do', ':DapStepOver<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>di', ':DapStepInto<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>dr', ':DapRestart<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>dx', ':DapTerminate<CR>', opts)
+
+-- VimWiki
+vim.api.nvim_set_keymap('n', '<leader>ww', ':VimwikiIndex<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>wd', ':VimwikiMakeDiaryNote<CR>', opts)
+
+-- Packer
+vim.api.nvim_set_keymap('n', '<leader>ps', ':PackerSync<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>pi', ':PackerInstall<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>pc', ':PackerClean<CR>', opts)
+
+-- Telescope
+vim.api.nvim_set_keymap('n', '<leader>ff', ':Telescope find_files<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>fg', ':Telescope live_grep<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>fb', ':Telescope buffers<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>fh', ':Telescope help_tags<CR>', opts)
+
+-- Tmux navigation
+vim.api.nvim_set_keymap('n', '<C-h>', ':TmuxNavigateLeft<CR>', opts)
+vim.api.nvim_set_keymap('n', '<C-j>', ':TmuxNavigateDown<CR>', opts)
+vim.api.nvim_set_keymap('n', '<C-k>', ':TmuxNavigateUp<CR>', opts)
+vim.api.nvim_set_keymap('n', '<C-l>', ':TmuxNavigateRight<CR>', opts)
